@@ -60,14 +60,14 @@ void setup()
     Serial.print(F("[SX1280] Initializing ... "));
     int state = radio.begin();
     if (u8g2) {
-        if (state != ERR_NONE) {
+        if (state != RADIOLIB_ERR_NONE) {
             u8g2->clearBuffer();
             u8g2->drawStr(0, 12, "Initializing: FAIL!");
             u8g2->sendBuffer();
         }
     }
 
-    if (state == ERR_NONE) {
+    if (state == RADIOLIB_ERR_NONE) {
         Serial.println(F("success!"));
     } else {
         Serial.print(F("failed, code "));
@@ -76,13 +76,13 @@ void setup()
     }
 
     // set output power to 13 dBm
-    if (radio.setOutputPower(13) == ERR_INVALID_OUTPUT_POWER) {
+    if (radio.setOutputPower(13) == RADIOLIB_ERR_INVALID_OUTPUT_POWER) {
         Serial.println(F("Selected output power is invalid for this module!"));
         while (true);
     }
 
     // set spreading factor to 10
-    if (radio.setSpreadingFactor(10) == ERR_INVALID_SPREADING_FACTOR) {
+    if (radio.setSpreadingFactor(10) == RADIOLIB_ERR_INVALID_SPREADING_FACTOR) {
         Serial.println(F("Selected spreading factor is invalid for this module!"));
         while (true);
     }
@@ -93,7 +93,7 @@ void setup()
     // start listening for LoRa packets
     Serial.print(F("[SX1280] Starting to listen ... "));
     state = radio.startReceive();
-    if (state == ERR_NONE) {
+    if (state == RADIOLIB_ERR_NONE) {
         Serial.println(F("success!"));
     } else {
         Serial.print(F("failed, code "));
@@ -137,7 +137,7 @@ void loop()
           int state = radio.readData(byteArr, 8);
         */
 
-        if (state == ERR_NONE) {
+        if (state == RADIOLIB_ERR_NONE) {
             // packet was successfully received
             Serial.println(F("[SX1280] Received packet!"));
 
@@ -170,7 +170,7 @@ void loop()
             }
 #endif
 
-        } else if (state == ERR_CRC_MISMATCH) {
+        } else if (state == RADIOLIB_ERR_CRC_MISMATCH) {
             // packet was received, but is malformed
             Serial.println(F("[SX1280] CRC error!"));
 

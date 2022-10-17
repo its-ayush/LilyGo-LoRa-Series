@@ -24,7 +24,7 @@
 SX1280 radio = new Module(RADIO_CS_PIN, RADIO_DIO1_PIN, RADIO_RST_PIN, RADIO_BUSY_PIN);
 
 // save transmission state between loops
-int transmissionState = ERR_NONE;
+int transmissionState = RADIOLIB_ERR_NONE;
 
 // flag to indicate that a packet was sent
 volatile bool transmittedFlag = false;
@@ -60,14 +60,14 @@ void setup()
     int state = radio.begin();
 #ifdef HAS_DISPLAY
     if (u8g2) {
-        if (state != ERR_NONE) {
+        if (state != RADIOLIB_ERR_NONE) {
             u8g2->clearBuffer();
             u8g2->drawStr(0, 12, "Initializing: FAIL!");
             u8g2->sendBuffer();
         }
     }
 #endif
-    if (state == ERR_NONE) {
+    if (state == RADIOLIB_ERR_NONE) {
         Serial.println(F("success!"));
     } else {
         Serial.print(F("failed, code "));
@@ -76,13 +76,13 @@ void setup()
     }
 
     // set output power to 13 dBm
-    if (radio.setOutputPower(13) == ERR_INVALID_OUTPUT_POWER) {
+    if (radio.setOutputPower(13) == RADIOLIB_ERR_INVALID_OUTPUT_POWER) {
         Serial.println(F("Selected output power is invalid for this module!"));
         while (true);
     }
 
     // set spreading factor to 10
-    if (radio.setSpreadingFactor(10) == ERR_INVALID_SPREADING_FACTOR) {
+    if (radio.setSpreadingFactor(10) == RADIOLIB_ERR_INVALID_SPREADING_FACTOR) {
         Serial.println(F("Selected spreading factor is invalid for this module!"));
         while (true);
     }
@@ -120,7 +120,7 @@ void loop()
         // reset flag
         transmittedFlag = false;
 
-        if (transmissionState == ERR_NONE) {
+        if (transmissionState == RADIOLIB_ERR_NONE) {
             // packet was successfully sent
             Serial.println(F("transmission finished!"));
 
